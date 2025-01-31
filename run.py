@@ -1,10 +1,18 @@
 import sys
 import os
 
-# Ensure the `app/` folder is in the system path
-
+# Add the root project directory to `sys.path`
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
-from app import create_app
+
+# Debugging: Print current paths
+print("Current working directory:", os.getcwd())
+print("Python path:", sys.path)
+
+try:
+    from app import create_app
+    print("Successfully imported 'app'")
+except ModuleNotFoundError as e:
+    print("ERROR: Could not import 'app'", e)
 
 # Create an instance of the Flask app
 app = create_app()
