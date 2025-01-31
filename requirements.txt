@@ -1,3 +1,11 @@
+Flask
+Flask-JWT-Extended
+python-dotenv
+Flask-SQLAlchemy
+Flask-CORS
+Flask-RESTful
+psycopg2  # PostgreSQL support (optional)
+mysql-connector-python  # MySQL support (optional)
 blinker==1.9.0
 click==8.1.8
 Flask==3.1.0
