@@ -19,4 +19,8 @@ def create_app():
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(resources_bp, url_prefix='/resources')
 
+    # Default route to prevent 404 on "/"
+    @app.route('/')
+    def home():
+        return {"message": "Welcome to API in a Flask!"}
     return app
