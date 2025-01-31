@@ -1,2 +1,2 @@
 # API
-Personal project - Wanted to see if i could build a RestAPI
+Personal project - Wanted to see if i could build a RestAPI using Flask (Python)
