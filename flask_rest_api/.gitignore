@@ -1,0 +1,7 @@
+echo "__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+venv/
+.gitpod/" > .gitignore
