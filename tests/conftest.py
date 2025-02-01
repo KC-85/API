@@ -18,6 +18,8 @@ def client():
 
 @pytest.fixture
 def auth_headers():
-    """ Creates authentication headers for an admin user """
-    access_token = create_access_token(identity="admin")
+    """ Creates authentication headers for an admin user inside app context """
+    app = create_app()  # Create the Flask app
+    with app.app_context():  # Ensure we're inside an application context
+        access_token = create_access_token(identity="admin")
     return {"Authorization": f"Bearer {access_token}"}
