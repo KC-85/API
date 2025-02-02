@@ -1,8 +1,7 @@
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from flask_jwt_extended import get_jwt_identity
 from app.models import resources
-from app.config import limiter
+from app.config import limiter  # ✅ Import limiter from config, not app
 
 resources_bp = Blueprint("resources", __name__)
 
@@ -32,10 +31,9 @@ def add_resource(resource_type):
     resources[resource_type].append(new_item)
     return jsonify(new_item), 201
 
-
 @resources_bp.route('/<resource_type>/<int:item_id>', methods=['PUT'])
 @jwt_required()
-@limiter.limit("3 per minute")  # Limit update requests to 3 per minute
+@limiter.limit("3 per minute")  # ✅ Apply rate limit to updates
 def update_resource(resource_type, item_id):
     """ Update an item in a given resource type """
     current_user = get_jwt_identity()

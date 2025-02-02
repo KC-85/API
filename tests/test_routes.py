@@ -45,8 +45,11 @@ def test_update_resource_not_found(client, auth_headers):
     assert response.status_code == 404
     assert "error" in response.json
 
+### 🆕 **UPDATED Rate Limit Test**
 def test_update_rate_limit(client, auth_headers):
     """ Test that update requests are limited to 3 per minute """
+    
+    # Make 3 allowed requests
     for _ in range(3):
         response = client.put(
             "/resources/tasks/1",
@@ -62,7 +65,19 @@ def test_update_rate_limit(client, auth_headers):
         json={"name": "Exceeding Rate Limit", "status": "Failed"}
     )
     assert response.status_code == 429  # Too Many Requests
-    assert "Rate limit exceeded" in response.json["error"]
+    
+    # Assert status code first
+    assert response.status_code == 429  # Too Many Requests
+
+    # ✅ Fix: Ensure JSON response
+    assert response.is_json, f"Expected JSON response, but got: {response.data.decode()}"
+    
+    # ✅ Fix: Print full response if test fails
+    print("DEBUG: Response Data:", response.get_data(as_text=True))  
+
+    # ✅ Fix: Ensure response contains expected error message
+    response_json = response.get_json()
+    assert "Rate limit exceeded" in response_json.get("error", ""), "Expected 'Rate limit exceeded' error message"
 
     # Wait 60 seconds before making another request
     time.sleep(60)

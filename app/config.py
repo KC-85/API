@@ -7,12 +7,15 @@ from limits.storage import RedisStorage
 # Load environment variables from .env file
 load_dotenv()
 
+# ✅ Define `limiter` globally here to avoid circular import
+limiter = Limiter(
+    key_func=get_remote_address,
+    storage_uri="redis://localhost:6379",  # Ensure Redis is running
+    strategy="moving-window"  # Best suited for rate limiting
+)
+
 class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", "fallback_secret_key")
     JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "fallback_jwt_secret")
     DEBUG = os.getenv("DEBUG", "False").lower() in ["true", "1"]
     CORS_ORIGINS = os.getenv("CORS_ORIGINS", "*")  # Allow all origins by default
-
-    # ✅ Ensure Rate Limit is explicitly set
-    RATE_LIMIT = os.getenv("RATE_LIMIT", "3 per minute")
-    
