@@ -1,0 +1,6 @@
+tasks:
+  - name: Setup Environment
+    init: |
+      sudo apt update && sudo apt install redis-server -y
+      redis-server --daemonize yes  # Auto-start Redis
+    command: redis-cli ping
