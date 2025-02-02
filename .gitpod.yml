@@ -1,5 +1,5 @@
 tasks:
-  - name: Setup Environment
+  - name: Install Redis
     init: |
       sudo apt update && sudo apt install redis-server -y
       redis-server --daemonize yes  # Auto-start Redis
