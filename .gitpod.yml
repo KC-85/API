@@ -1,0 +1,8 @@
+image: .gitpod.Dockerfile
+
+tasks:
+  - name: Start Redis
+    init: |
+      sudo systemctl enable redis-server  # Enable Redis on boot
+      sudo systemctl start redis-server   # Start Redis service
+    command: redis-cli ping || echo "Redis failed to start"
