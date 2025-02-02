@@ -1,10 +1,9 @@
 image: gitpod/workspace-full  # Use Gitpod's default image
 
 tasks:
-  - name: Install Dependencies
+  - name: Start Redis & Setup Environment
     init: |
-      # Install Redis
-      sudo apt update && sudo apt install -y redis-server redis-tools
+      sudo apt update && sudo apt install -y redis-server
       redis-server --daemonize yes
       # Ensure Redis is running
       redis-cli ping || echo "Redis failed to start"
