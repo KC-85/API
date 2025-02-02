@@ -3,8 +3,7 @@ from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-from flask_limiter.storage.redis import RedisStorage
-import redis
+from limits.storage import RedisStorage
 from app.config import Config
 from app.routes import resources_bp
 from app.auth import auth_bp
@@ -21,7 +20,7 @@ def create_app():
 
     # ✅ Add Rate Limiting with Redis (Persistent Storage)
     limiter = Limiter(
-        get_remote_address,
+        key_func=get_remote_address,
         app=app,
         storage_uri="redis://localhost:6379"  # Connects to Redis running locally
     )

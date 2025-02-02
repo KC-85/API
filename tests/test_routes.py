@@ -75,6 +75,8 @@ def test_update_rate_limit(client, auth_headers):
     )
     assert response.status_code == 200
 
+    time.sleep(1)  # ✅ Add small delay to ensure Redis updates limits
+
 def test_delete_resource(client, auth_headers):
     """ Test deleting a resource (Admin Only) """
     response = client.delete("/resources/tasks/1", headers=auth_headers)
