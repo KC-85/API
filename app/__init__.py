@@ -4,7 +4,7 @@ from flask_cors import CORS
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from limits.storage import RedisStorage
-from app.config import Config
+from app.config import Config, limiter
 from app.routes import resources_bp
 from app.auth import auth_bp
 
@@ -18,12 +18,8 @@ def create_app():
     # Initialize JWT
     JWTManager(app)
 
-    # ✅ Add Rate Limiting with Redis (Persistent Storage)
-    limiter = Limiter(
-        key_func=get_remote_address,
-        app=app,
-        storage_uri="redis://localhost:6379"  # Connects to Redis running locally
-    )
+    # ✅ Attach Limiter to the Flask app
+    limiter.init_app(app)
 
     # Register Blueprints
     app.register_blueprint(auth_bp, url_prefix='/auth')

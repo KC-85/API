@@ -1,13 +1,9 @@
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.models import resources
-from flask_limiter import Limiter
-from flask_limiter.util import get_remote_address
+from app.config import limiter
 
 resources_bp = Blueprint("resources", __name__)
-
-# Rate Limiter: Apply a custom limit for updates
-limiter = Limiter(get_remote_address)
 
 @resources_bp.route('/<resource_type>', methods=['GET'])
 @jwt_required()
