@@ -8,4 +8,4 @@ RUN sudo apt update && sudo apt install redis-server -y
 EXPOSE 6379
 
 # Start Redis when the workspace starts
-CMD ["redis-server", "--protected-mode no"]
+CMD ["redis-server", "--daemonize", "no", "--protected-mode", "no"]
