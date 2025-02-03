@@ -1,6 +1,0 @@
-image: gitpod/workspace-full  # Use Gitpod's default image
-
-tasks:
-  - name: Start Redis
-    command: |
-      redis-server --daemonize yes || echo "Redis already running"
