@@ -1,31 +1,31 @@
-import docker
+import subprocess
 import time
 
 def start_redis():
-    client = docker.from_env()
-
-    # Check if Redis container exists
     try:
-        redis_container = client.containers.get("redis")
-        if redis_container.status != "running":
-            print("🔄 Starting Redis container...")
-            redis_container.start()
-            time.sleep(2)  # Wait for Redis to fully start
+        # Check if Redis is already running
+        result = subprocess.run(["redis-cli", "ping"], capture_output=True, text=True)
+
+        if "PONG" in result.stdout:
+            print("✅ Redis is already running.")
+            return
+        
+        # Start Redis in daemon mode
+        print("🚀 Starting Redis server...")
+        subprocess.run(["redis-server", "--daemonize", "yes"], check=True)
+        
+        # Wait for Redis to fully start
+        time.sleep(2)
+
+        # Test if Redis started successfully
+        result = subprocess.run(["redis-cli", "ping"], capture_output=True, text=True)
+        if "PONG" in result.stdout:
             print("✅ Redis started successfully!")
         else:
-            print("🚀 Redis is already running.")
-    except docker.errors.NotFound:
-        print("⚠️ Redis container not found. Creating a new one...")
-        client.containers.run("redis", name="redis", detach=True, ports={"6379/tcp": 6379})
-        time.sleep(2)
-        print("✅ New Redis container created and started!")
-
-    # Check Redis connection
-    exec_result = redis_container.exec_run("redis-cli ping")
-    if b"PONG" in exec_result.output:
-        print("✅ Redis is working!")
-    else:
-        print("❌ Redis failed to start!")
+            print("❌ Failed to start Redis.")
+    
+    except Exception as e:
+        print(f"⚠️ Error: {e}")
 
 if __name__ == "__main__":
     start_redis()
