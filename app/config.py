@@ -15,7 +15,7 @@ limiter = Limiter(
 )
 
 class Config:
-    SECRET_KEY = os.getenv("SECRET_KEY", "fallback_secret_key")
-    JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "fallback_jwt_secret")
+    SECRET_KEY = os.getenv("SECRET_KEY", os.urandom(24).hex())
+    JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", os.urandom(24).hex())
     DEBUG = os.getenv("DEBUG", "False").lower() in ["true", "1"]
     CORS_ORIGINS = os.getenv("CORS_ORIGINS", "*")  # Allow all origins by default
