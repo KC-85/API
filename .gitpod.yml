@@ -3,14 +3,9 @@ image: gitpod/workspace-full  # Use Gitpod's default image
 tasks:
   - name: Start Redis & Setup Environment
     init: |
-      sudo apt update && sudo apt install -y redis-server
-      redis-server --daemonize yes
-      # Ensure Redis is running
-      redis-cli ping || echo "Redis failed to start"
-      
-      # Install Python dependencies
+      docker run -d --name redis -p 6379:6379 redis:latest || echo "Redis already running"
       pip install -r requirements.txt
-    command: pytest -v  # Optional: Run tests after setup
+    command: docker exec redis redis-cli ping  # Test Redis
 
 ports:
   - port: 6379  # Expose Redis if needed
