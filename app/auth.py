@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import create_access_token
 from app.models import resources
+from app.security_utils import SecurityEnhancements
 
 auth_bp = Blueprint("auth", __name__)
 
@@ -10,11 +11,21 @@ def register():
     data = request.get_json()
     username, password = data.get("username"), data.get("password")
 
+    # ✅ Validate input
+    try:
+        username = SecurityEnhancements.validate_input(username)
+        password = SecurityEnhancements.validate_input(password)
+    except ValueError:
+        return jsonify({"error": "Invalid characters in input"}), 400
+
     if not username or not password:
         return jsonify({"error": "Username and password required"}), 400
 
     if any(user["username"] == username for user in resources["users"]):
         return jsonify({"error": "User already exists"}), 409
+    
+    # Hash password securely
+    hashed_password = SecurityEnhancements.secure_hash(password)
 
     new_user = {"id": len(resources["users"]) + 1, "username": username, "role": "user"}
     resources["users"].append(new_user)
@@ -24,7 +35,14 @@ def register():
 def login():
     """ Authenticates a user and returns a JWT token """
     data = request.get_json()
-    username = data.get("username")
+    username, password = data.get("username"), data.get("password")
+
+    # ✅ Validate input
+    try:
+        username = SecurityEnhancements.validate_input(username)
+        password = SecurityEnhancements.validate_input(password)
+    except ValueError:
+        return jsonify({"error": "Invalid characters in input"}), 400
 
     user = next((user for user in resources["users"] if user["username"] == username), None)
     if not user:
