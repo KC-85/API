@@ -4,7 +4,7 @@ from flask_cors import CORS
 from app.config import Config, limiter  # ✅ Import limiter from config.py
 from app.auth import auth_bp
 from app.routes import resources_bp
-from app.security_utils import SecurityEnhancements
+from utils.security_utils import SecurityEnhancements
 
 def create_app():
     app = Flask(__name__)
